@@ -1,34 +1,56 @@
 from aiogram import Router
 from aiogram.types import Message
 
-from database.queries import get_user
+from database.queries import (
+    get_user,
+    activate_trial
+)
 
 router = Router()
 
 
 @router.message(lambda m: m.text == "🎁 Trial")
-async def activate_trial(message: Message):
+async def activate_trial_btn(message: Message):
 
-    user = await get_user(message.from_user.id)
+    user = await get_user(
+        message.from_user.id
+    )
 
     if not user:
         return await message.answer(
             "❌ User not found.\n/start command use karo."
         )
 
-    if user.plan != "none":
+    success = await activate_trial(
+        message.from_user.id
+    )
+
+    if not success:
         return await message.answer(
-            "⚠️ Aap pehle hi Trial ya Premium Plan use kar rahe ho."
+            """
+⚠️ Trial Already Used
+
+Aap pehle se kisi plan par ho.
+
+👤 Profile check karo.
+"""
         )
 
     await message.answer(
         """
-🎉 Trial Activated Successfully
+╔══════════════════╗
+🎉 TRIAL ACTIVATED
+╚══════════════════╝
 
-💎 Plan : Trial
-📅 Validity : 1 Day
-📂 File Limit : 10
+💎 Plan:
+TRIAL
 
-🚀 Enjoy Premium Features
+📅 Validity:
+1 Day
+
+📂 File Limit:
+10 Files
+
+🚀 Premium Features Unlocked
 """
     )
