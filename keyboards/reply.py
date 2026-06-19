@@ -1,26 +1,53 @@
-from aiogram.types import ReplyKeyboardMarkup
-from aiogram.types import KeyboardButton
+from aiogram.types import (
+    ReplyKeyboardMarkup,
+    KeyboardButton
+)
 
 
 def main_menu():
 
-    return ReplyKeyboardMarkup(
-        keyboard=[
-            [
-                KeyboardButton(text="👤 Profile"),
-                KeyboardButton(text="🎁 Trial")
-            ],
-            [
-                KeyboardButton(text="🔑 Activate PIN"),
-                KeyboardButton(text="📂 Process File")
-            ],
-            [
-                KeyboardButton(text="🎯 Referral"),
-                KeyboardButton(text="💎 Plans")
-            ],
-            [
-                KeyboardButton(text="📞 Support")
-            ]
+    keyboard = [
+        [
+            KeyboardButton(
+                text="👤 Profile"
+            ),
+            KeyboardButton(
+                text="🎁 Trial"
+            )
         ],
-        resize_keyboard=True
+
+        [
+            KeyboardButton(
+                text="🔑 Activate PIN"
+            ),
+            KeyboardButton(
+                text="📂 Process File"
+            )
+        ],
+
+        [
+            KeyboardButton(
+                text="🎯 Referral"
+            ),
+            KeyboardButton(
+                text="💎 Plans"
+            )
+        ],
+
+        [
+            KeyboardButton(
+                text="📞 Support"
+            ),
+            KeyboardButton(
+                text="ℹ️ Help"
+            )
+        ]
+    ]
+
+    return ReplyKeyboardMarkup(
+        keyboard=keyboard,
+        resize_keyboard=True,
+        is_persistent=True,
+        input_field_placeholder=
+        "🚀 Select an option..."
     )
