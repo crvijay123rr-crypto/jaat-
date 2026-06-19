@@ -6,6 +6,10 @@ from database.queries import (
     activate_trial
 )
 
+from services.referral import (
+    reward_referrer
+)
+
 router = Router()
 
 
@@ -36,6 +40,14 @@ Aap pehle se kisi plan par ho.
 """
         )
 
+    # Referral Reward
+    try:
+        await reward_referrer(
+            message.from_user.id
+        )
+    except:
+        pass
+
     await message.answer(
         """
 ╔══════════════════╗
@@ -50,6 +62,9 @@ TRIAL
 
 📂 File Limit:
 10 Files
+
+🎁 Referral Reward:
+Enabled
 
 🚀 Premium Features Unlocked
 """
