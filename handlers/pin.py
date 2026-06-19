@@ -1,9 +1,13 @@
 from aiogram import Router
 from aiogram.types import Message
 
-from database.queries import (
+from services.core import (
     get_user,
-    get_pin
+    activate_pin
+)
+
+from services.referral import (
+    reward_referrer
 )
 
 router = Router()
@@ -28,37 +32,53 @@ GOLD-ABC123
 
 
 @router.message()
-async def activate_pin(message: Message):
+async def activate_pin_handler(
+    message: Message
+):
 
     pin_code = message.text.strip()
-
-    pin = await get_pin(pin_code)
-
-    if not pin:
-        return
 
     user = await get_user(
         message.from_user.id
     )
 
     if not user:
+
         return await message.answer(
             "❌ User not found."
         )
 
+    success, result = await activate_pin(
+        message.from_user.id,
+        pin_code
+    )
+
+    if not success:
+
+        return await message.answer(
+            f"❌ {result}"
+        )
+
+    try:
+
+        await reward_referrer(
+            message.from_user.id
+        )
+
+    except:
+        pass
+
     await message.answer(
         f"""
+╔══════════════════╗
 🎉 PIN ACTIVATED
+╚══════════════════╝
 
 💎 Plan:
-{pin.plan.upper()}
+{result.upper()}
 
-📅 Validity:
-{pin.days} Days
+✅ Premium Access Enabled
 
-📂 Files:
-{pin.file_limit}
-
-🚀 Premium Access Granted
+🚀 Enjoy Premium Features
 """
     )
